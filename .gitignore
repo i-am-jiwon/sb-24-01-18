@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Custom ###
+rest2024_dev.mv.db
+rest2024_dev.trace.db
