@@ -1,5 +1,6 @@
 package com.ll.sb240118.domain.aritcle.article.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
