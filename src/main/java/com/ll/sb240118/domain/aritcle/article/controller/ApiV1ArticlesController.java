@@ -3,6 +3,7 @@ package com.ll.sb240118.domain.aritcle.article.controller;
 import com.ll.sb240118.domain.aritcle.article.dto.ArticleDto;
 import com.ll.sb240118.domain.aritcle.article.entity.Article;
 import com.ll.sb240118.domain.aritcle.article.service.ArticleService;
+import com.ll.sb240118.global.rsData.RsData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +36,8 @@ public class ApiV1ArticlesController {
  }
 
     @GetMapping("")
-    public GetArticleResponseBody getArticles(){
-     return new GetArticleResponseBody(articleService.findAllByOrderByIdDesc());
+    public RsData<GetArticleResponseBody> getArticles(){
+        return RsData.of("200", "성공", new GetArticleResponseBody(articleService.findAllByOrderByIdDesc()));
     }
 
 }
