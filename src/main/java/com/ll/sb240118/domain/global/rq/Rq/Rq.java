@@ -18,14 +18,19 @@ public class Rq {
     private final HttpServletResponse response;
     private final MemberService memberService;
     private Member member;
-    public Member getMember(){
-        if(member == null){
-            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    public Member getMember() {
+        if (member == null) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             user.getUsername();
 
             member = memberService.findByUsername(user.getUsername()).get();
         }
 
         return member;
+    }
+
+    public String getHeader(String name) {
+        return request.getHeader(name);
     }
 }
