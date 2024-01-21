@@ -138,13 +138,16 @@ public class ApiV1ArticlesController {
             @RequestBody WriteArticleRequestBody body
     ) {
         Member member = rq.getMember();
-        Article article = articleService.write(member, body.getTitle(), body.getBody()).getData();
+
+        RsData<Article> writeRs = articleService.write(member, body.getTitle(), body.getBody());
 
 
         return RsData.of(
-                "200",
-                "성공",
-                new WirteArticleResponseBody(article)
+                writeRs.getResultCode(),
+                writeRs.getMsg(),
+                new WirteArticleResponseBody(
+                        writeRs.getData()
+                )
         );
     }
 }
