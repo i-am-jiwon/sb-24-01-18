@@ -7,6 +7,7 @@ import com.ll.sb240118.global.rsData.RsData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,26 +19,41 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ApiV1ArticlesController {
 
- private final ArticleService articleService;
+    private final ArticleService articleService;
 
- @Getter
- public static class GetArticleResponseBody{
-     private final List<ArticleDto> items;
-     private final Map pagination;
-     public GetArticleResponseBody(List<Article> articles) {
-         items = articles
-                 .stream()
-                 .map(ArticleDto::new)
-                 .toList();
+    @Getter
+    public static class GetArticlesResponseBody {
+        private final List<ArticleDto> items;
+        private final Map pagination;
 
-         pagination = Map.of("page", 1);
-     }
+        public GetArticlesResponseBody(List<Article> articles) {
+            items = articles
+                    .stream()
+                    .map(ArticleDto::new)
+                    .toList();
 
- }
+            pagination = Map.of("page", 1);
+        }
+
+    }
 
     @GetMapping("")
-    public RsData<GetArticleResponseBody> getArticles(){
-        return RsData.of("200", "성공", new GetArticleResponseBody(articleService.findAllByOrderByIdDesc()));
+    public RsData<GetArticlesResponseBody> getArticles() {
+        return RsData.of("200", "성공", new GetArticlesResponseBody(articleService.findAllByOrderByIdDesc()));
+    }
+
+    @Getter
+    public static class GetArticleResponseBody {
+        private final ArticleDto item;
+
+        public GetArticleResponseBody(Article article) {
+            item = new ArticleDto(article);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public RsData<GetArticleResponseBody> getArticle(@PathVariable long id) {
+        return RsData.of("200", "성공", new GetArticleResponseBody(articleService.findById(id).get()));
     }
 
 }

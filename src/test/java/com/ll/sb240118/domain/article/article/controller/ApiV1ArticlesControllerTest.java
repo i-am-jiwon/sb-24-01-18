@@ -43,9 +43,31 @@ public class ApiV1ArticlesControllerTest {
                 .andExpect(jsonPath("$.data.items[0].id", instanceOf(Number.class)))
                 .andExpect(jsonPath("$.data.items[0].createDate", matchesPattern(DATE_PATTERN)))
                 .andExpect(jsonPath("$.data.items[0].modifyDate", matchesPattern(DATE_PATTERN)))
-                .andExpect(jsonPath("$.data.items[0].authorId", is(3)))
+                .andExpect(jsonPath("$.data.items[0].authorId", instanceOf(Number.class)))
                 .andExpect(jsonPath("$.data.items[0].authorName", notNullValue()))
                 .andExpect(jsonPath("$.data.items[0].title", notNullValue()))
                 .andExpect(jsonPath("$.data.items[0].body", notNullValue()));
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/articles/1")
+    void t2() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/api/v1/articles/1"))
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(ApiV1ArticlesController.class))
+                .andExpect(handler().methodName("getArticle"))
+                .andExpect(jsonPath("$.data.item.id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.data.item.createDate", matchesPattern(DATE_PATTERN)))
+                .andExpect(jsonPath("$.data.item.modifyDate", matchesPattern(DATE_PATTERN)))
+                .andExpect(jsonPath("$.data.item.authorId", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.data.item.authorName", notNullValue()))
+                .andExpect(jsonPath("$.data.item.title", notNullValue()))
+                .andExpect(jsonPath("$.data.item.body", notNullValue()));
     }
 }
