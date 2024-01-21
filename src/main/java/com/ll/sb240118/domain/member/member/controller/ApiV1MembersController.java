@@ -1,6 +1,6 @@
 package com.ll.sb240118.domain.member.member.controller;
 
-import com.ll.sb240118.domain.global.rq.Rq.Rq;
+import com.ll.sb240118.global.rq.Rq.Rq;
 import com.ll.sb240118.domain.member.member.dto.MemberDto;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.service.MemberService;

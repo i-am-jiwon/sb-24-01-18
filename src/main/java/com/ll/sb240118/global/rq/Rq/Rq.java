@@ -1,4 +1,4 @@
-package com.ll.sb240118.domain.global.rq.Rq;
+package com.ll.sb240118.global.rq.Rq;
 
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.service.MemberService;

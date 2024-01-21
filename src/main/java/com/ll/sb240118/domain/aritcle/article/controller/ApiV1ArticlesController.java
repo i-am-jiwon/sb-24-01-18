@@ -3,7 +3,7 @@ package com.ll.sb240118.domain.aritcle.article.controller;
 import com.ll.sb240118.domain.aritcle.article.dto.ArticleDto;
 import com.ll.sb240118.domain.aritcle.article.entity.Article;
 import com.ll.sb240118.domain.aritcle.article.service.ArticleService;
-import com.ll.sb240118.domain.global.rq.Rq.Rq;
+import com.ll.sb240118.global.rq.Rq.Rq;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.global.rsData.RsData;
 import lombok.Getter;
