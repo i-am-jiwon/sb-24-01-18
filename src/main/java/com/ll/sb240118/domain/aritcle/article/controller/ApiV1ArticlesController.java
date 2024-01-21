@@ -3,6 +3,8 @@ package com.ll.sb240118.domain.aritcle.article.controller;
 import com.ll.sb240118.domain.aritcle.article.dto.ArticleDto;
 import com.ll.sb240118.domain.aritcle.article.entity.Article;
 import com.ll.sb240118.domain.aritcle.article.service.ArticleService;
+import com.ll.sb240118.domain.global.rq.Rq.Rq;
+import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.global.rsData.RsData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class ApiV1ArticlesController {
 
     private final ArticleService articleService;
+    private final Rq rq;
 
     @Getter
     public static class GetArticlesResponseBody {
@@ -84,7 +87,7 @@ public class ApiV1ArticlesController {
 
     @Getter
     @Setter
-    public static class ModifyArticleRequestBody{
+    public static class ModifyArticleRequestBody {
         private String title;
         private String body;
     }
@@ -111,6 +114,37 @@ public class ApiV1ArticlesController {
                 "200",
                 "성공",
                 new ModifyArticleResponseBody(article)
+        );
+    }
+
+    @Getter
+    @Setter
+    public static class WriteArticleRequestBody {
+        private String title;
+        private String body;
+    }
+
+    @Getter
+    public static class WirteArticleResponseBody {
+        private final ArticleDto item;
+
+        public WirteArticleResponseBody(Article article) {
+            item = new ArticleDto(article);
+        }
+    }
+
+    @PostMapping("")
+    public RsData<WirteArticleResponseBody> writeArticle(
+            @RequestBody WriteArticleRequestBody body
+    ) {
+        Member member = rq.getMember();
+        Article article = articleService.write(member, body.getTitle(), body.getBody()).getData();
+
+
+        return RsData.of(
+                "200",
+                "성공",
+                new WirteArticleResponseBody(article)
         );
     }
 }

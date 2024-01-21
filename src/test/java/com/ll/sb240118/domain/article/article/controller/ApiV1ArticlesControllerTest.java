@@ -134,4 +134,36 @@ public class ApiV1ArticlesControllerTest {
                 .andExpect(jsonPath("$.data.item.body", is("내용1-수정")));
 
     }
+
+    @Test
+    @DisplayName("POST /api/v1/articles")
+    void t5() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        post("/api/v1/articles")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                            "title": "제목 new",
+                                            "body": "내용 new"
+                                        }
+                                        """)
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(ApiV1ArticlesController.class))
+                .andExpect(handler().methodName("writeArticle"))
+                .andExpect(jsonPath("$.data.item.id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.data.item.createDate", matchesPattern(DATE_PATTERN)))
+                .andExpect(jsonPath("$.data.item.modifyDate", matchesPattern(DATE_PATTERN)))
+                .andExpect(jsonPath("$.data.item.authorId", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.data.item.authorName", notNullValue()))
+                .andExpect(jsonPath("$.data.item.title", is("제목 new")))
+                .andExpect(jsonPath("$.data.item.body", is("내용 new")));
+
+    }
 }
