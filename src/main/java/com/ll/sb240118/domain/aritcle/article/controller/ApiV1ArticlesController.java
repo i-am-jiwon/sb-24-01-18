@@ -143,7 +143,7 @@ public class ApiV1ArticlesController {
 
 
         return writeRs.of(
-                new WirteArticleResponseBody(
+                new  WirteArticleResponseBody(
                         writeRs.getData()
                 )
         );
