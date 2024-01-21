@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,15 +22,19 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final MemberService memberService;
-
+    private final PasswordEncoder passwordEncoder;
     @Override
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
-
-        if (username != null) {
+        if (username != null && password != null) {
             Member member = memberService.findByUsername(username).get();
+
+            if (!passwordEncoder.matches(password, member.getPassword())) {
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            }
 
             User user = new User(
                     member.getUsername(),
