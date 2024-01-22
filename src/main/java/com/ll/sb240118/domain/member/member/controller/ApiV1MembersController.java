@@ -5,12 +5,15 @@ import com.ll.sb240118.domain.member.member.dto.MemberDto;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.service.MemberService;
 import com.ll.sb240118.global.rsData.RsData;
+import com.ll.sb240118.global.util.JwtUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/members")
@@ -30,9 +33,11 @@ public class ApiV1MembersController {
     @Getter
     public static class LoginResponseBody {
         private final MemberDto item;
+        private final String accessToken;
 
-        public LoginResponseBody(Member member) {
+        public LoginResponseBody(Member member, String accessToken) {
             item = new MemberDto(member);
+            this.accessToken = accessToken;
         }
     }
 
@@ -47,23 +52,14 @@ public class ApiV1MembersController {
 
         Member member = checkRs.getData();
 
+        Long id = member.getId();
+       String accessToken = JwtUtil.encode(Map.of("id", id.toString()));
+
         return RsData.of(
                 "200",
                 "로그인 성공",
-                new LoginResponseBody(member)
+                new LoginResponseBody(member, accessToken)
         );
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/apiKey")
-    public RsData<?> regenApiKey() {
-        Member member = rq.getMember();
-
-        memberService.regenApiKey(member);
-
-        return RsData.of(
-                "200",
-                "해당 키가 재생성 되었습니다."
-        );
-    }
 }

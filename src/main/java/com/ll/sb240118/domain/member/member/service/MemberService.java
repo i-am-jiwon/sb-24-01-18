@@ -3,12 +3,16 @@ package com.ll.sb240118.domain.member.member.service;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.repository.MemberRepository;
 import com.ll.sb240118.global.rsData.RsData;
+import com.ll.sb240118.global.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,8 +50,14 @@ public class MemberService {
         return memberRepository.findByUsername(username);
     }
 
+    @SneakyThrows
     public Optional<Member> findByApiKey(String apiKey) {
-        return memberRepository.findByApiKey(apiKey);
+        Claims claims = JwtUtil.decode(apiKey);
+
+        Map<String, String> data = (Map<String, String>)claims.get("data");
+        long id = Long.parseLong(data.get("id"));
+
+        return findById(id);
     }
 
     public RsData<Member> checkUsernameAndPassword(String username, String password) {
@@ -64,8 +74,4 @@ public class MemberService {
         return RsData.of("200", "로그인 성공", memberOp.get());
     }
 
-    @Transactional
-    public void regenApiKey(Member member) {
-        member.setApiKey(UUID.randomUUID().toString());
-    }
 }
