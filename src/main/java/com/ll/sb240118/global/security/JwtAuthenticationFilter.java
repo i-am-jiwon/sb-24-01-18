@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Member member = memberService.findByApiKey(apiKey).get();
 
             User user = new User(
-                    member.getUsername(),
+                    String.valueOf(member.getId()),
                     member.getPassword(),
                     List.of()
             );
