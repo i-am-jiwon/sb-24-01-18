@@ -30,13 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String apiKey = request.getHeader("X-ApiKey");
 
         if (apiKey != null) {
-            Member member = memberService.findByApiKey(apiKey).get();
-
-            User user = new User(
-                    String.valueOf(member.getId()),
-                    member.getPassword(),
-                    List.of()
-            );
+            User user = memberService.getUserFromApiKey(apiKey);
 
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     user,

@@ -7,11 +7,15 @@ import com.ll.sb240118.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,13 +55,23 @@ public class MemberService {
     }
 
     @SneakyThrows
-    public Optional<Member> findByApiKey(String apiKey) {
+    public User getUserFromApiKey(String apiKey) {
         Claims claims = JwtUtil.decode(apiKey);
 
-        Map<String, String> data = (Map<String, String>)claims.get("data");
-        long id = Long.parseLong(data.get("id"));
+        Map<String, Object> data = (Map<String, Object>)claims.get("data");
+        String id = (String)data.get("id");
+        List<? extends GrantedAuthority> authorities = ((List<String>) data.get("authorities"))
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
-        return findById(id);
+
+        return new User(
+                id,
+                "",
+                authorities
+        );
+
     }
 
     public RsData<Member> checkUsernameAndPassword(String username, String password) {
