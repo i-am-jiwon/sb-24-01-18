@@ -32,6 +32,7 @@ public class Member extends BaseEntity {
         return nickname;
     }
 
+    @SuppressWarnings("JpaAttributeTypeInspection")
     public List<? extends GrantedAuthority> getAuthorities(){
 
         return getAuthoritiesAsStrList()
@@ -39,7 +40,7 @@ public class Member extends BaseEntity {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
-
+    @SuppressWarnings("JpaAttributeTypeInspection")
     public List<String> getAuthoritiesAsStrList() {
         return List.of("ROLE_MEMBER");
     }
