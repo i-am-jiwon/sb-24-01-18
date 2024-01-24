@@ -2,6 +2,7 @@ package com.ll.sb240118.global.rq.Rq;
 
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.service.MemberService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class Rq {
     private final HttpServletResponse response;
     private final MemberService memberService;
     private Member member;
+    private final EntityManager entityManager;
 
     public Member getMember() {
         if (member == null) {
@@ -25,7 +27,7 @@ public class Rq {
 
             long memberId = Long.parseLong(user.getUsername());
 
-            member = memberService.findById(memberId).get();
+            member = entityManager.getReference(Member.class, memberId);
         }
 
         return member;
