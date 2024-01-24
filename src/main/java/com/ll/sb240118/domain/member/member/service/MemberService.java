@@ -3,6 +3,7 @@ package com.ll.sb240118.domain.member.member.service;
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.repository.MemberRepository;
 import com.ll.sb240118.global.rsData.RsData;
+import com.ll.sb240118.global.security.SecurityUser;
 import com.ll.sb240118.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -55,19 +56,21 @@ public class MemberService {
     }
 
     @SneakyThrows
-    public User getUserFromApiKey(String apiKey) {
+    public SecurityUser getUserFromApiKey(String apiKey) {
         Claims claims = JwtUtil.decode(apiKey);
 
         Map<String, Object> data = (Map<String, Object>)claims.get("data");
-        String id = (String)data.get("id");
+        long id = Long.parseLong((String)data.get("id"));
+        String username = (String)data.get("username");
         List<? extends GrantedAuthority> authorities = ((List<String>) data.get("authorities"))
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
 
-        return new User(
+        return new SecurityUser(
                 id,
+                username,
                 "",
                 authorities
         );

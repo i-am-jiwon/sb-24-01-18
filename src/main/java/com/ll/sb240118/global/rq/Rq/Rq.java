@@ -2,6 +2,7 @@ package com.ll.sb240118.global.rq.Rq;
 
 import com.ll.sb240118.domain.member.member.entity.Member;
 import com.ll.sb240118.domain.member.member.service.MemberService;
+import com.ll.sb240118.global.security.SecurityUser;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,9 +24,9 @@ public class Rq {
 
     public Member getMember() {
         if (member == null) {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            SecurityUser user = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            long memberId = Long.parseLong(user.getUsername());
+            long memberId = user.getId();
 
             member = entityManager.getReference(Member.class, memberId);
         }
