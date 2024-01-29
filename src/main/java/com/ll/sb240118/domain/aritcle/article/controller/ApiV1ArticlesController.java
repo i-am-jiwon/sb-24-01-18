@@ -106,6 +106,7 @@ public class ApiV1ArticlesController {
         }
     }
 
+    //Transactional 없어도 돼나?
     @PutMapping("/{id}")
     public RsData<ModifyArticleResponseBody> modifyArticle(
             @PathVariable long id,
