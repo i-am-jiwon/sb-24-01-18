@@ -78,6 +78,7 @@ public class ApiV1ArticlesController {
     // test 3
     // test 4
     // test 5
+    // test6
     @DeleteMapping("/{id}")
     public RsData<RemoveArticleResponseBody> removeArticle(
             @PathVariable long id
